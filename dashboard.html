@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FinWise</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>FinWise</h2>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li>
+                        <a href="dashboard.html" class="active">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="budget-tracking.html">
+                            <i class="fas fa-chart-pie"></i>
+                            <span>Budget Tracking</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="portfolio.html">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Investment Portfolio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="prediction.html">
+                            <i class="fas fa-brain"></i>
+                            <span>Suggestion</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="page-header">
+                <h1>Dashboard</h1>
+                <div class="user-profile-container">
+                    <button class="btn btn-primary" id="importTransactionsBtn">
+                        <i class="fas fa-file-import"></i> Import Transactions
+                    </button>
+                    <div class="user-profile" id="profileButton">
+                        <span id="userName">John Doe</span>
+                        <img src="images\profile.png" alt="User Profile">
+                    </div>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="profile-dropdown-item" id="editProfileBtn">
+                            <i class="fas fa-user-edit"></i>
+                            <span>Edit Profile</span>
+                        </div>
+                        <div class="profile-dropdown-item" id="logoutBtnDropdown">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-cards">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Total Balance</h3>
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-value" id="totalBalance">$8,540</div>
+                        
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Monthly Spending</h3>
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-value" id="monthlySpending">$2,345</div>
+                        
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Savings Rate</h3>
+                        <i class="fas fa-piggy-bank"></i>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-value" id="savingsRate">24%</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Expense Breakdown</h3>
+                    <button class="btn btn-primary" id="addTransactionBtn">
+                        <i class="fas fa-plus"></i> Add Transaction
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="transaction-list">
+                <h3>Recent Transactions</h3>
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th>
+                            Date
+                            <button class="sort-btn" data-sort="date">
+                                <i class="fas fa-sort"></i>
+                            </button>
+                        </th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>
+                            Amount
+                            <button class="sort-btn" data-sort="amount">
+                                <i class="fas fa-sort"></i>
+                            </button>
+                        </th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="transactionTableBody">
+                      <!-- Transactions will be dynamically inserted here -->
+                    </tbody>
+                  </table>
+                  
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Transaction Modal -->
+    <div id="transactionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Transaction</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="transactionForm">
+                    <div class="form-group">
+                        <label for="transactionType">Transaction Type</label>
+                        <select id="transactionType" class="form-control" required>
+                            <option value="expense">Expense</option>
+                            <option value="income">Income</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionDate">Date</label>
+                        <input type="date" id="transactionDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionDescription">Description</label>
+                        <input type="text" id="transactionDescription" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionCategory">Category</label>
+                        <select id="transactionCategory" class="form-control" required>
+                            <optgroup id="expenseCategories" label="Expense Categories">
+                                <option value="Housing">Housing</option>
+                                <option value="Transportation">Transportation</option>
+                                <option value="Food">Food</option>
+                                <option value="Utilities">Utilities</option>
+                                <option value="Insurance">Insurance</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Personal">Personal</option>
+                                <option value="Education">Education</option>
+                                <option value="Savings">Savings</option>
+                                <option value="Other">Other</option>
+                            </optgroup>
+                            <optgroup id="incomeCategories" label="Income Categories">
+                                <option value="Salary">Salary</option>
+                                <option value="Bonus">Bonus</option>
+                                <option value="Investment">Investment Returns</option>
+                                <option value="Freelance">Freelance</option>
+                                <option value="Rental">Rental Income</option>
+                                <option value="Refunds">Refunds</option>
+                                <option value="Other Income">Other Income</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionAmount">Amount (₹)</label>
+                        <input type="number" id="transactionAmount" class="form-control" step="0.01" min="0" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Add Transaction</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Profile Update Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Update Profile</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="profileUpdateForm">
+                <div class="form-group">
+                    <label for="updateFirstName">First Name</label>
+                    <input type="text" id="updateFirstName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="updateLastName">Last Name</label>
+                    <input type="text" id="updateLastName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="updateEmail">Email</label>
+                    <input type="email" id="updateEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="updatePassword">New Password (leave blank to keep current)</label>
+                    <input type="password" id="updatePassword" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="updateDob">Date of Birth</label>
+                    <input type="date" id="updateDob" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="updateMonthlyIncome">Monthly Income</label>
+                    <input type="number" id="updateMonthlyIncome" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Update Profile</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Import Transactions Modal -->
+    <div id="importTransactionsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Import Transactions</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="csvFile">Select CSV File</label>
+                    <input type="file" id="csvFile" accept=".csv" class="form-control">
+                    <small class="form-text">
+                        Please upload a CSV file with the following columns: Date, Description, Amount, Category<br>
+                        Example: 2024-03-20, Grocery Shopping, -50.00, Food
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="dateFormat">Date Format</label>
+                    <select id="dateFormat" class="form-control">
+                        <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                        <option value="DD-MM-YYYY">DD-MM-YYYY</option>
+                        <option value="MM-DD-YYYY">MM-DD-YYYY</option>
+                    </select>
+                </div>
+                <div id="previewData" style="display: none;">
+                    <h4>Preview</h4>
+                    <div class="preview-table-container">
+                        <table class="preview-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Category</th>
+                                </tr>
+                            </thead>
+                            <tbody id="previewTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 20px;">
+                    <button id="importButton" class="btn btn-primary" style="width: 100%;" disabled>
+                        Import Transactions
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="profile.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

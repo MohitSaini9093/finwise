@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Predictions - FinWise</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>FinWise</h2>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li>
+                        <a href="dashboard.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="budget-tracking.html">
+                            <i class="fas fa-chart-pie"></i>
+                            <span>Budget Tracking</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="portfolio.html">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Investment Portfolio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="prediction.html" class="active">
+                            <i class="fas fa-brain"></i>
+                            <span>Suggestion</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="page-header">
+                <h1>AI Predictions & Recommendations</h1>
+                <div class="user-profile-container">
+                    <div class="user-profile" id="profileButton">
+                        <span id="userName">John Doe</span>
+                        <img src="images\profile.png" alt="User Profile">
+                    </div>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="profile-dropdown-item" id="editProfileBtn">
+                            <i class="fas fa-user-edit"></i>
+                            <span>Edit Profile</span>
+                        </div>
+                        <div class="profile-dropdown-item" id="logoutBtnDropdown">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Financial Health Score</h3>
+                </div>
+                <div class="card-body">
+                    <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                        <div style="position: relative; width: 200px; height: 200px;">
+                            <canvas id="healthScoreChart"></canvas>
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                                <div style="font-size: 2.5rem; font-weight: 700;" id="healthScore">78</div>
+                                <div>Good</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Your financial health score is calculated based on your spending habits, savings rate, debt levels, and investment strategy.</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>50/30/20 Budget Analysis</h3>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="budgetRuleChart"></canvas>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <p><strong>50/30/20 Rule:</strong> 50% of your income should go to needs, 30% to wants, and 20% to savings and debt repayment.</p>
+                        <div id="budgetRuleAnalysis">
+                            <!-- Budget rule analysis will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>AI Recommendations</h3>
+                </div>
+                <div class="card-body">
+                    <div id="recommendationsContainer">
+                        <!-- Recommendations will be loaded here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Future Projections</h3>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="projectionsChart"></canvas>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <p>Based on your current financial behavior, here's how your net worth might grow over time.</p>
+                        <div id="projectionDetails">
+                            <!-- Projection details will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Finance Chatbot Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Financial Assistant</h3>
+                </div>
+                <div class="card-body">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <!-- Chat messages will appear here -->
+                            <div class="message bot-message">
+                                <i class="fas fa-robot"></i>
+                                <div class="message-content">
+                                    Hello! I'm your financial assistant. Ask me anything about personal finance, investments, or your financial goals.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <input type="text" id="chatInput" placeholder="Ask a question about your finances..." class="chat-input">
+                            <button id="sendMessage" class="chat-send-btn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Profile Update Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Update Profile</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="profileUpdateForm">
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" id="updateFirstName" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" id="updateLastName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="updateEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password (leave blank to keep current)</label>
+                    <input type="password" id="updatePassword">
+                </div>
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input type="date" id="updateDob" required>
+                </div>
+                <div class="form-group">
+                    <label>Monthly Income</label>
+                    <input type="number" id="updateMonthlyIncome" required>
+                </div>
+                <button type="submit">Update Profile</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="prediction.js"></script>
+    <script src="profile.js"></script>
+</body>
+</html>

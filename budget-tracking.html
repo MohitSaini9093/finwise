@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Tracking - FinWise</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>FinWise</h2>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li>
+                        <a href="dashboard.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="budget-tracking.html" class="active">
+                            <i class="fas fa-chart-pie"></i>
+                            <span>Budget Tracking</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="portfolio.html">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Investment Portfolio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="prediction.html">
+                            <i class="fas fa-brain"></i>
+                            <span>Suggestion</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="page-header">
+                <h1>Budget Tracking</h1>
+                <div class="user-profile-container">
+                    <button class="btn btn-primary" id="importTransactionsBtn">
+                        <i class="fas fa-file-import"></i> Import Bank Transactions
+                    </button>
+                    <div class="user-profile" id="profileButton">
+                        <span id="userName">John Doe</span>
+                        <img src="images\profile.png" alt="User Profile">
+                    </div>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="profile-dropdown-item" id="editProfileBtn">
+                            <i class="fas fa-user-edit"></i>
+                            <span>Edit Profile</span>
+                        </div>
+                        <div class="profile-dropdown-item" id="logoutBtnDropdown">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-cards">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Monthly Budget</h3>
+                        <div class="card-actions">
+                            <button class="edit-btn" onclick="editMonthlyBudget()">
+                                <i class="fa-regular fa-pen-to-square"></i>
+                            </button>
+                        </div>
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-value" id="monthlyBudget">₹4,000</div>
+                        <div class="stat-change">Based on your income</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Spent So Far</h3>
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-value" id="spentSoFar">₹2,345</div>
+                        <div class="stat-change">58.6% of budget</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Remaining</h3>
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-value" id="remaining">₹1,655</div>
+                        <div class="stat-change">41.4% of budget</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category-cards">
+                <h3>Category-wise Budget Overview</h3>
+                <div class="category-grid" id="categoryCards">
+                    <!-- Category cards will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!-- Category Details Modal -->
+            <div class="modal" id="categoryDetailsModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="categoryModalTitle">Category Details</h3>
+                        <button class="close-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="category-stats">
+                            <div class="stat-item">
+                                <h4>Total Spent</h4>
+                                <div id="categoryTotalSpent" class="stat-value">₹0</div>
+                            </div>
+                            <div class="stat-item">
+                                <h4>Monthly Budget</h4>
+                                <div id="categoryBudget" class="stat-value">₹0</div>
+                            </div>
+                            <div class="stat-item">
+                                <h4>Transaction Count</h4>
+                                <div id="categoryTransactionCount" class="stat-value">0</div>
+                            </div>
+                        </div>
+                        <div class="recent-transactions">
+                            <h4>Recent Transactions</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="categoryTransactionsList">
+                                    <!-- Transactions will be dynamically inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-container">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="overview">Overview</button>
+                    <button class="tab-btn" data-tab="categories">Categories</button>
+                    <button class="tab-btn" data-tab="trends">Trends</button>
+                </div>
+                
+                <div class="tab-content active" id="overview">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Budget Progress</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="budgetProgressChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="categories">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Spending by Category</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="categoryChart"></canvas>
+                            </div>
+                            <div id="categoryBreakdown">
+                                <!-- Category breakdown will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="trends">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Monthly Spending Trends</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="trendChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Profile Update Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Update Profile</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="profileUpdateForm">
+                <div class="form-group">
+                    <label for="updateFirstName">First Name</label>
+                    <input type="text" id="updateFirstName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="updateLastName">Last Name</label>
+                    <input type="text" id="updateLastName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="updateEmail">Email</label>
+                    <input type="email" id="updateEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="updatePassword">New Password (leave blank to keep current)</label>
+                    <input type="password" id="updatePassword" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="updateDob">Date of Birth</label>
+                    <input type="date" id="updateDob" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="updateMonthlyIncome">Monthly Income</label>
+                    <input type="number" id="updateMonthlyIncome" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Update Profile</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Import Transactions Modal -->
+    <div class="modal" id="importTransactionsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Import Bank Transactions</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Select Bank Statement File</label>
+                    <input type="file" id="bankStatementFile" accept=".csv,.pdf" class="form-control">
+                    <small class="form-text">Supported formats: 
+                        <ul>
+                            <li>CSV with columns: Account No, DATE, TRANSACTION DETAILS, WITHDRAWAL AMT, DEPOSIT AMT</li>
+                            <li>PDF bank statements (automatically extracts transaction data)</li>
+                        </ul>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label>Date Format</label>
+                    <select id="dateFormat" class="form-control">
+                        <option value="DD-MM-YYYY">DD-MM-YYYY</option>
+                        <option value="MM-DD-YYYY">MM-DD-YYYY</option>
+                        <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                    </select>
+                </div>
+                <div id="previewData" class="preview-container" style="display: none;">
+                    <h4>Preview</h4>
+                    <div class="preview-table-container">
+                        <table class="preview-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Transaction Details</th>
+                                    <th>Amount</th>
+                                    <th>Category</th>
+                                </tr>
+                            </thead>
+                            <tbody id="previewTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <button type="button" id="importButton" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
+                    Import Transactions
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="budget-tracking.js"></script>
+    <script src="profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Portfolio - FinWise</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>FinWise</h2>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="budget-tracking.html"><i class="fas fa-chart-pie"></i> Budget Tracking</a></li>
+                    <li><a href="portfolio.html" class="active"><i class="fas fa-chart-line"></i> Investment Portfolio</a></li>
+                    <li><a href="prediction.html"><i class="fas fa-brain"></i> Suggestion</a></li>
+                    <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="page-header">
+                <h1>Investment Portfolio</h1>
+                <div class="user-profile-container">
+                    <div class="user-profile" id="profileButton">
+                        <span id="userName">John Doe</span>
+                        <img src="images\profile.png" alt="User Profile">
+                    </div>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="profile-dropdown-item" id="editProfileBtn">
+                            <i class="fas fa-user-edit"></i>
+                            <span>Edit Profile</span>
+                        </div>
+                        <div class="profile-dropdown-item" id="logoutBtnDropdown">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-cards">
+                <div class="card">
+                    <div class="card-header"><h3>Total Portfolio Value</h3> <i class="fa-solid fa-coins"></i></div>
+                    <div class="card-body"><div class="stat-value" id="portfolioValue">₹0.00</div></div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h3>Annual Return</h3> <i class="fas fa-chart-line"></i></div>
+                    <div class="card-body"><div class="stat-value" id="annualReturn">0.0%</div></div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h3>Risk Level</h3> <i class="fas fa-shield-alt"></i></div>
+                    <div class="card-body"><div class="stat-value" id="riskLevel">N/A</div></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Asset Allocation</h3>
+                    <button class="btn btn-primary" id="addInvestmentBtn"><i class="fas fa-plus"></i> Add Investment</button>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container"><canvas id="assetAllocationChart"></canvas></div>
+                </div>
+            </div>
+            
+            <div class="transaction-list">
+                <h3>Investment Holdings</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Asset</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                            <th>Allocation</th>
+                            <th>Return</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="investmentTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Investment Modal -->
+    <div class="modal" id="investmentModal">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Add New Investment</h3><button class="close-modal">&times;</button></div>
+            <form id="investmentForm">
+                <div class="form-group"><label>Asset Name</label><input type="text" id="investmentName" required></div>
+                <div class="form-group">
+                    <label>Asset Type</label>
+                    <select id="investmentType" required>
+                        <option value="">Select Type</option>
+                        <option value="Stocks">Stocks</option>
+                        <option value="Bonds">Bonds</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Commodities">Commodities</option>
+                        <option value="Cryptocurrency">Cryptocurrency</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Current Value</label><input type="number" id="investmentValue" step="0.01" required></div>
+                <div class="form-group"><label>Annual Return (%)</label><input type="number" id="investmentReturn" step="0.1" required></div>
+                <button type="submit">Add Investment</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Profile Update Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Update Profile</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="profileUpdateForm">
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" id="updateFirstName" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" id="updateLastName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="updateEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password (leave blank to keep current)</label>
+                    <input type="password" id="updatePassword">
+                </div>
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input type="date" id="updateDob" required>
+                </div>
+                <div class="form-group">
+                    <label>Monthly Income</label>
+                    <input type="number" id="updateMonthlyIncome" required>
+                </div>
+                <button type="submit">Update Profile</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="portfolio.js"></script>
+    <script src="profile.js"></script>
+</body>
+</html>
